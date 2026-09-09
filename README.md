@@ -2,6 +2,8 @@
 
 A native macOS 26+ menu bar app that covers selected displays, including the primary or only monitor with pure black or a Tahoe-inspired decorative lock screen. Built with Swift 6, AppKit, SwiftUI, and Carbon; no external dependencies or network access.
 
+Download **v1.0.0** from [GitHub Releases](https://github.com/matinhimself/blackout/releases/latest). Extract the ZIP and open `Blackout.app`. Requires macOS 26 or later; the app is ad-hoc signed and not notarized. See [CHANGELOG.md](CHANGELOG.md) for release notes.
+
 ## Build and run
 
 Requires macOS 26+ and Xcode 26.3+ (Swift 6.2 or newer).
