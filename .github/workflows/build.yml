@@ -1,0 +1,47 @@
+name: Build and test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  macos:
+    name: macOS 26 · Release
+    runs-on: macos-26
+    timeout-minutes: 20
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain
+        run: |
+          xcodebuild -version
+          swift --version
+      - name: Unit tests
+        run: swift test
+      - name: Build app
+        run: >-
+          xcodebuild -quiet
+          -project Blackout.xcodeproj
+          -scheme Blackout
+          -configuration Release
+          -destination 'generic/platform=macOS'
+          -derivedDataPath build
+          build
+      - name: Package app
+        run: ditto -c -k --sequesterRsrc --keepParent build/Build/Products/Release/Blackout.app Blackout-macOS.zip
+      - name: Upload app
+        uses: actions/upload-artifact@v4
+        with:
+          name: Blackout-macOS
+          path: Blackout-macOS.zip
+          if-no-files-found: error
+          retention-days: 14
